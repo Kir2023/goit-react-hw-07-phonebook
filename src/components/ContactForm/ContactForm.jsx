@@ -1,36 +1,30 @@
-import React, { useReducer } from 'react';
+import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { nanoid } from 'nanoid';
-
-import { addContact } from 'redux/contacts.reducer';
+import { addContact } from 'redux/operations';
+import { selectContacts } from 'redux/selectors';
 
 import css from './ContactForm.module.css';
 
 export const ContactForm = () => {
-  const initialValue = { name: '', number: '' };
-
-  const reducer = (state, action) => {
-    switch (action.type) {
-      case 'name':
-        return { ...state, name: action.payload };
-      case 'number':
-        return { ...state, number: action.payload };
-      case 'reset':
-        return initialValue;
-      default:
-        return state;
-    }
-  };
-
-  const contacts = useSelector(state => state.contactsBook.contacts);
+  const contacts = useSelector(selectContacts);
   const dispatch = useDispatch();
+  const [name, setName] = useState('');
+  const [phone, setPhone] = useState('');
 
-  const [{ name, number }, dispatchReducer] = useReducer(reducer, initialValue);
+  const handleInputChange = ({ target }) => {
+    const { name, value } = target;
 
-  const handleInputChange = e => {
-    const { name, value } = e.target;
-    dispatchReducer({ type: name, payload: value });
+    switch (name) {
+      case 'name':
+        setName(value);
+        break;
+      case 'number':
+        setPhone(value);
+        break;
+      default:
+        return;
+    }
   };
 
   const isNameInContacts = contactData => {
@@ -49,9 +43,10 @@ export const ContactForm = () => {
     e.preventDefault();
 
     if (!isNameInContacts(name)) {
-      dispatch(addContact({ id: nanoid(), name, number }));
-      dispatchReducer({ type: 'reset', payload: initialValue });
+      dispatch(addContact({ name, phone }));
     }
+    setName('');
+    setPhone('');
   };
 
   return (
@@ -77,7 +72,7 @@ export const ContactForm = () => {
         title="Phone number must be digits and can contain spaces, dashes, parentheses and can start with +"
         required
         placeholder="Enter phone number"
-        value={number}
+        value={phone}
         onChange={handleInputChange}
       />
       <button className={css.formBtn} type="submit">
