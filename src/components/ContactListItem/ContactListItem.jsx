@@ -10,6 +10,7 @@ const ContactListItem = ({ id, name, phone }) => {
 
   const handleDelete = () => {
     dispatch(deleteContact(id));
+    alert(`${name} succesfuly deleted`);
   };
 
   return (

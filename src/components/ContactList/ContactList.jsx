@@ -22,7 +22,7 @@ export const ContactList = () => {
         {isLoading && !error ? (
           <Loader />
         ) : filteredContacts.length === 0 && !error ? (
-          <p>The Phonebook is empty. Add your first contact. 🫤</p>
+          <p>The Phonebook is empty. Add your first contact.</p>
         ) : (
           filteredContacts.map(({ id, name, phone }) => (
             <ContactListItem key={id} id={id} name={name} phone={phone} />

@@ -44,9 +44,10 @@ export const ContactForm = () => {
 
     if (!isNameInContacts(name)) {
       dispatch(addContact({ name, phone }));
+      alert(`${name} succesfuly added in contacts`);
+      setName('');
+      setPhone('');
     }
-    setName('');
-    setPhone('');
   };
 
   return (
